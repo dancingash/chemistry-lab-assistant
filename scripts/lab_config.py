@@ -1,9 +1,17 @@
 """Shared portable paths. Program assets and experimental data are separate."""
 import json
 import os
+import sys
 from pathlib import Path
 
 PROGRAM_ROOT = Path(__file__).resolve().parents[1]
+
+
+def configure_console():
+    """Use UTF-8 for CLI output, including redirected Windows streams."""
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, 'reconfigure'):
+            stream.reconfigure(encoding='utf-8')
 
 
 def config_path():

@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import subprocess
 import sys
-from lab_config import PROGRAM_ROOT, init_data
+from lab_config import configure_console, PROGRAM_ROOT, init_data
 
 
 def create_demo(root):
@@ -34,6 +34,7 @@ def create_demo(root):
 
 
 def main():
+    configure_console()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, required=True, help='Empty isolated demonstration data directory')
     args = parser.parse_args()

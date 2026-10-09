@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from lab_config import configure_console
 import hashlib
 import json
 import re
@@ -114,6 +115,7 @@ def extract_docx(path: Path):
 
 
 def main():
+    configure_console()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('input_docx', type=Path)
     parser.add_argument('--out', type=Path)

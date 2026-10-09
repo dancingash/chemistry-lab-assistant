@@ -12,7 +12,7 @@ import sys
 import tempfile
 import venv
 
-from lab_config import PROGRAM_ROOT, init_data, python_executable
+from lab_config import configure_console, PROGRAM_ROOT, init_data, python_executable
 
 LEGACY = ('lab-daily-report', 'lab-experiment-plan', 'lab-project-context', 'lab-weekly-report', 'lab-monthly-report')
 SCRIPTS = ('lab_config.py', 'lab_records.py', 'lab_plans.py', 'project_context.py',
@@ -145,6 +145,7 @@ def install(source, skills_dir, data_dir=None, skip_deps=False, retire_legacy=Fa
 
 
 def main():
+    configure_console()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', type=Path, default=PROGRAM_ROOT)
     parser.add_argument('--skills-dir', type=Path, default=Path(os.environ.get('CODEX_HOME', Path.home() / '.codex')) / 'skills')

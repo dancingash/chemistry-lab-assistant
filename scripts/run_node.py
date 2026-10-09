@@ -3,10 +3,11 @@ import argparse
 import os
 from pathlib import Path
 import subprocess
-from lab_config import PROGRAM_ROOT
+from lab_config import configure_console, PROGRAM_ROOT
 
 
 def main():
+    configure_console()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--node', required=True, type=Path)
     parser.add_argument('--node-modules', required=True, type=Path)

@@ -119,7 +119,7 @@ class PortableInstallTest(unittest.TestCase):
 
     def test_demo_links_two_days_to_one_plan_and_refuses_overwrite(self):
         root = self.folder / 'fictional-demo'
-        with patch('demo.subprocess.run', wraps=subprocess.run):
+        with patch.dict(os.environ, {'PYTHONIOENCODING': 'cp1252'}), patch('demo.subprocess.run', wraps=subprocess.run):
             create_demo(root)
         from lab_records import Store
         records = Store(root).query(sample='DEMO-20300107-1')

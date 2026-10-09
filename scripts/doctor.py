@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
-from lab_config import PROGRAM_ROOT, data_root, python_executable
+from lab_config import configure_console, PROGRAM_ROOT, data_root, python_executable
 
 
 def check(node=None, node_modules=None, skills=None):
@@ -56,6 +56,7 @@ def check(node=None, node_modules=None, skills=None):
 
 
 def main():
+    configure_console()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--node', type=Path)
     parser.add_argument('--node-modules', type=Path)

@@ -1,6 +1,6 @@
 """Version shared project references without rewriting historical report conclusions."""
 from __future__ import annotations
-from lab_config import data_root
+from lab_config import configure_console, data_root
 import argparse
 import hashlib
 import json
@@ -164,8 +164,7 @@ def update(root, candidate, effective_date, allow_remove=False, *, literature=Fa
 
 
 def main():
-    if hasattr(sys.stdout, 'reconfigure'):
-        sys.stdout.reconfigure(encoding='utf-8')
+    configure_console()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, default=None)
     parser.add_argument('command', choices=['update', 'preview', 'route'])

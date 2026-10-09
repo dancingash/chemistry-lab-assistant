@@ -1,5 +1,6 @@
 """Build a source ZIP from Git's public file list; never enumerate private workspace data."""
 import argparse
+from lab_config import configure_console
 import json
 from pathlib import Path
 import subprocess
@@ -39,6 +40,7 @@ def build(output, git='git'):
 
 
 def main():
+    configure_console()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=ROOT/'outputs/lab-rd-0.1.0-source.zip')
     parser.add_argument('--git', default='git')

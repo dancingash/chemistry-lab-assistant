@@ -1,6 +1,6 @@
 """Local daily report storage. Run --help for scoped queries, saves and monthly trackers."""
 from __future__ import annotations
-from lab_config import data_root
+from lab_config import configure_console, data_root
 
 import argparse
 from copy import deepcopy
@@ -482,8 +482,7 @@ class Store:
 
 
 def main():
-    if hasattr(sys.stdout, 'reconfigure'):
-        sys.stdout.reconfigure(encoding='utf-8')
+    configure_console()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, default=None)
     sub = parser.add_subparsers(dest='command', required=True)

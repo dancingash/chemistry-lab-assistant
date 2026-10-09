@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+from lab_config import configure_console
 import datetime as dt
 import json
 import re
@@ -108,6 +109,7 @@ def fallback_content(records: list[dict]) -> str:
 
 
 def main() -> None:
+    configure_console()
     parser = argparse.ArgumentParser()
     parser.add_argument("extract_json", type=Path)
     parser.add_argument("--references-dir", type=Path, required=True)
