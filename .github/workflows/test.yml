@@ -1,0 +1,24 @@
+name: Portable core and installer
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ['3.12', '3.13', '3.14']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -r requirements.lock
+      - run: python tests/run_tests.py
+      - name: Real isolated installation from checkout
+        run: python scripts/install.py --skills-dir "work/CI skills 中文" --data-dir "work/CI data 中文"
+      - name: Verify installed interpreter and data
+        run: python tests/check_installed.py "work/CI skills 中文/lab-rd"

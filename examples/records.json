@@ -1,0 +1,20 @@
+{
+  "records": [
+    {
+      "record_id": "fictional-demo-record-1", "date": "2030-01-07", "created_date": "2030-01-07",
+      "project": "DEMO 虚构软件验证项目", "sample_id": "DEMO-20300107-1", "step": "S01",
+      "experiment_type": "合成", "state": "待测试",
+      "today": "虚构软件演示：登记样品及方案引用。",
+      "details": "虚构输入，实际用量待补。", "follow_up": "添加虚构测试记录验证同一样品追溯。",
+      "plan_stage": "validation", "plan_id": "DEMO:validation", "plan_version": "1"
+    },
+    {
+      "record_id": "fictional-demo-record-2", "date": "2030-01-08", "created_date": "2030-01-07",
+      "project": "DEMO 虚构软件验证项目", "sample_id": "DEMO-20300107-1", "step": "S01",
+      "experiment_type": "测试", "state": "已完成",
+      "today": "虚构软件演示：评分 12 points。",
+      "details": "示例评分：12 points。此数值仅为软件测试数据。", "follow_up": "验证日报、周报与月报中的身份一致。",
+      "plan_stage": "validation", "plan_id": "DEMO:validation", "plan_version": "1"
+    }
+  ]
+}

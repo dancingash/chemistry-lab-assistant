@@ -1,0 +1,22 @@
+# FICTIONAL software example. These numbers are not chemistry guidance.
+project_id: DEMO
+project_name: 虚构软件验证项目
+status: active
+project_route: 使用虚构记录验证软件追溯和汇报。
+project_background:
+  research_problem: 验证软件安装及数据链路
+technical_route:
+  status: pending
+  stages: []
+targets:
+  示例评分:
+    type: min
+    value: 10
+    unit: points
+    required: true
+chart_groups:
+  radar: []
+  bar: []
+  qualitative: []
+reference_sources: []
+legacy_project_ids: []

@@ -1,0 +1,6 @@
+interface:
+  display_name: "研发助手"
+  short_description: "统一管理材料研发项目背景、实验方案、日报、样品追溯及每周每月汇报"
+  default_prompt: "Use $lab-rd to manage my materials R&D records, experiment plans and reports."
+policy:
+  allow_implicit_invocation: true

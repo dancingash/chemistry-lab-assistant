@@ -1,0 +1,25 @@
+# Empty starter schema; fill only confirmed information. No default acceptance thresholds.
+project_id: YOUR_PROJECT
+project_name: 待补
+status: active
+project_route: 待建立
+project_background:
+  research_problem: 待补
+  application_goal: 待补
+  existing_methods: 待补
+  limitations: 待补
+  hypothesis: 待补
+  target_metrics: []
+  literature_evidence: []
+  experimental_evidence: []
+technical_route:
+  status: pending
+  stages: []
+  alternatives: []
+targets: {}
+chart_groups:
+  radar: []
+  bar: []
+  qualitative: []
+reference_sources: []
+legacy_project_ids: []

@@ -1,0 +1,12 @@
+{
+  "project_id": "DEMO", "stage_id": "validation", "stage_name": "虚构软件验证阶段",
+  "operation_id": "fictional-demo-plan-1", "date": "2030-01-07",
+  "source": {"description": "虚构软件验证条件，不用于真实实验"},
+  "content": {
+    "purpose": "验证版本及日报关联", "materials": {"示例材料": "1.00 g（计划用量，虚构）"},
+    "operations": {"1 记录": "记录虚构输入以验证软件"},
+    "conditions": {"示例设置": "设置 A（虚构）"},
+    "tests": {"示例评分": "软件虚构数据，不是实验结果"},
+    "pending": ["此方案仅用于软件演示，不是可执行实验 SOP"]
+  }
+}
