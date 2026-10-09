@@ -93,7 +93,8 @@ def install(source, skills_dir, data_dir=None, skip_deps=False, retire_legacy=Fa
                 if old.get('dependency_hash') != dependency_hash:
                     # Also supports Codex's embedded Python, which has pip but no ensurepip wheels.
                     subprocess.run([sys.executable, '-m', 'pip', '--python', str(runtime), 'install', '--disable-pip-version-check',
-                                    '-r', str(stage / 'requirements.lock')], check=True)
+                                    '-r', str(stage / 'requirements.lock')], check=True,
+                                   env={**os.environ, 'PYTHONIOENCODING': 'utf-8', 'PYTHONUTF8': '1'})
                 subprocess.run([str(runtime), '-c', 'import docx, yaml, openpyxl, pptx'], check=True)
             timestamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
             backup = skills_dir.parent / '.lab-rd-backups' / timestamp
