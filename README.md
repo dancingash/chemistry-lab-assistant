@@ -147,6 +147,6 @@ python3 -m venv .venv
 
 Windows 用 `.venv/Scripts/python.exe`。`.github/workflows/test.yml` 配置 Windows、macOS、Linux 和 Python 3.12/3.13/3.14 的核心测试，包括干净副本安装、重复安装、升级、中文路径、数据隔离与缺失依赖。
 
-**本地已执行的平台与报告 QA 记录见 `VALIDATION.md`（实现验证后生成）。CI 配置本身不表示其他平台已运行通过。** 完整报告使用 Codex 专用运行环境，需要在目标机器执行完整环境检查及示例报告渲染；普通 CI 验证核心工具和安装，不宣称完成 Codex 图形引擎验证。
+Windows、macOS、Linux × Python 3.12/3.13/3.14 的 9 组核心测试与独立安装检查已通过 [GitHub Actions](https://github.com/dancingash/chemistry-lab-assistant/actions/runs/37888173259)。平台与报告 QA 记录见 [VALIDATION.md](VALIDATION.md)。完整报告使用 Codex 专用运行环境，需要在目标机器执行完整环境检查及示例报告渲染；普通 CI 验证核心工具和安装，不宣称完成 Codex 图形引擎验证。
 
 仓库仅发布程序、干净模板和虚构示例。真实项目、历史报告、运行库、索引和本机配置均被 `.gitignore` 排除。本项目的安装入口是 `scripts/install.py`，`pyproject.toml` 声明依赖元数据，不将 `pip install .` 作为完整技能安装。

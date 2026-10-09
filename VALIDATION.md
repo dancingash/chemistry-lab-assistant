@@ -16,8 +16,12 @@
 - 新技能 frontmatter 验证和 Python 编译检查通过；发布文件清单排除了真实数据、旧模板、索引、工作产物和本机依赖。
 - 对已有 156 个背景、方案、报告及原模板文件做 SHA256 核对，未发生内容改动。
 
-## 尚未执行的目标环境
+## 三平台 CI
 
-macOS、Linux，以及 Python 3.13/3.14 的实际运行结果需由 GitHub Actions 或目标机器验证。仓库已配置三个操作系统和三个 Python 版本的 CI 矩阵；此处不将配置视为已通过。
+提交 `dfc837f5ad4069556c175d8c949c6ae89f524ea3` 的 [GitHub Actions 运行](https://github.com/dancingash/chemistry-lab-assistant/actions/runs/37888173259) 全部成功：Windows、macOS、Linux × Python 3.12、3.13、3.14，共 9 组。每组执行 48 项行为与安装测试，再从干净 checkout 在中文和空格路径中真实安装固定依赖，使用安装包自己的虚拟环境检查并运行虚构实验演示。
+
+首次 CI 发现 Windows 英文区域设置的输出编码问题，修复了命令行工具和 pip 子进程的 UTF-8 输出；本地也完成了 `PYTHONIOENCODING=cp1252` 下的中文路径安装与演示检查。
+
+## 仍需目标机器验证的能力
 
 普通 CI 不包含 Codex 的专用文档引擎。其他使用者须运行 `doctor.py --require-full`，并渲染检查自己的示例产物。现有检查不能证明 Microsoft Word、PowerPoint、Excel 中的原生执行结果，也不能保证任意长记录均无需排版调整。
