@@ -2,6 +2,7 @@
 name: lab-rd
 description: >
   Manage materials R&D projects, versioned experiment plans and user-designated best SOPs,
+  calculate user-specified formulations and experiment batches with Excel recipe exports,
   record daily experiments and sample lineage, and prepare weekly PowerPoint and monthly
   spreadsheet reports. Use for lab research workflows and report queries.
 ---
@@ -15,6 +16,7 @@ needed for the current request; use several for a task that crosses workflows.
 |---|---|
 | Project setup, background, goals, literature, route | [context](references/context.md) |
 | Create/change/reuse a plan, designate best, export SOP | [plans](references/plans.md) |
+| Calculate formulations, gradients/repeats, export recipe Excel, confirm a batch into daily records | [formulations](references/formulations.md) |
 | Record experiments, balance photos, corrections, sample queries | [daily](references/daily.md) |
 | Weekly summary or PPT | [weekly](references/weekly.md) |
 | Monthly summary or Excel | [monthly](references/monthly.md) |

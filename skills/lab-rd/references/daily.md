@@ -1,5 +1,9 @@
 # Lab Daily Report
 
+For completion of a calculated recipe batch, use [formulations](formulations.md) to recover its
+revision and selected groups, then the completion tool. Batch fields 配方批次、配方批次版本、配方实验组
+are retained with the plan reference. A completion report does not turn planned quantities into readings.
+
 ## Storage and tools
 
 Resolve `{root}` (data) and `{program}` (installed package) through the entrypoint configuration.

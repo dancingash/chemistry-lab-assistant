@@ -50,6 +50,24 @@ class PortableInstallTest(unittest.TestCase):
         self.assertEqual(json.loads(result.stdout)['records'], [])
         self.assertTrue((data / 'report/index.json').exists())
         self.assertFalse((package / 'report').exists())
+        # The new workflow must also run without access to the source checkout.
+        formulation = data / 'fictional-formulation-input.json'
+        formulation.write_text(json.dumps({
+            'project_id': 'DEMO', 'stage_id': 'mix', 'batch_id': 'portable', 'operation_id': 'save-portable',
+            'description': '软件测试比例配方', 'date': '2030-01-07',
+            'recipe': {'materials': [{'id': 'A', 'name': '测试材料'}],
+                       'calculations': [{'mode': 'mass_ratio', 'total': {'value': '25', 'unit': 'g', 'source': '软件测试'}, 'ratios': {'A': '1'}}]}
+        }), encoding='utf-8')
+        saved = subprocess.run([sys.executable, str(package / 'scripts/lab_formulations.py'),
+            'save', str(formulation)], env=env, check=True, capture_output=True, text=True, encoding='utf-8')
+        self.assertEqual(len(json.loads(saved.stdout)['groups']), 1)
+        completion = data / 'fictional-completion-input.json'
+        completion.write_text(json.dumps({'operation_id': 'complete-portable', 'confirmation': '软件测试确认完成',
+                                         'defaults': {'date': '2030-01-08'}}), encoding='utf-8')
+        completed = subprocess.run([sys.executable, str(package / 'scripts/lab_formulations.py'),
+            'complete', '--project', 'DEMO', '--stage', 'mix', '--batch', 'portable', str(completion)],
+            env=env, check=True, capture_output=True, text=True, encoding='utf-8')
+        self.assertEqual(json.loads(completed.stdout)['records'][0]['sample_id'], 'DEMO-20300108-1')
         for relative in json.loads((package / 'installation.json').read_text())['files']:
             path = package / relative
             if path.suffix in ('.py', '.md', '.json', '.yaml', '.mjs', '.toml', '.lock'):

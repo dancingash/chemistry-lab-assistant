@@ -33,7 +33,7 @@ STATES = {'合成中', '待后处理', '后处理中', '待测试', '测试中',
 COLORS = {'合成': ('2563EB', 'EFF6FF'), '后处理': ('16A34A', 'F0FDF4'), '测试': ('EA580C', 'FFF7ED')}
 META = ('record_id', 'date', 'sample_id', 'sample_ids', 'project', 'created_date', 'step',
         'source_sample', 'source_step', 'experiment_type', 'state', 'origin_record_id',
-        'plan_stage', 'plan_id', 'plan_version')
+        'plan_stage', 'plan_id', 'plan_version', 'batch_id', 'batch_revision', 'batch_group')
 
 
 class Conflict(ValueError):
@@ -409,6 +409,9 @@ class Store:
             date.fromisoformat(r['date'])
             from lab_plans import validate_record_plan
             validate_record_plan(self.root, r)
+            if any(r.get(k) for k in ('batch_id', 'batch_revision', 'batch_group')):
+                from lab_formulations import validate_record_batch
+                validate_record_batch(self.root, r)
             pending_identity = not SAMPLE_RE.fullmatch(r['sample_id'])
             if pending_identity and (r['created_date'], r['step'], r['state']) != ('待确认', '待确认', '待确认'):
                 raise Conflict('样品身份未确定时，创建日期、步骤和状态均须标为待确认')

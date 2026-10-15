@@ -1,5 +1,9 @@
 # Lab Experiment Plan
 
+For structured formulation calculations, gradients/repeats and subsequent batch completion, also
+read [formulations](formulations.md). Batch calculations pin numeric plan versions; no sample or daily
+fact is created until user-confirmed execution. Repeated groups can share the same plan snapshot.
+
 Resolve `{root}` (data) and `{program}` (installed package) through the entrypoint configuration.
 Use `{program}/scripts/lab_plans.py` with the installed virtual environment; use `load_workspace_dependencies` for Node and document engines.
 Read `{program}/scripts/lab_plans_contract.md` before saving, linking records or exporting.

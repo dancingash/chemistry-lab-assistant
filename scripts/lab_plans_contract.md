@@ -1,5 +1,9 @@
 # Experiment plan tool contract
 
+Calculated formulation batches use `lab_formulations.py` and its contract. Each batch group pins a
+normal numeric plan snapshot; independent repeats can reuse a snapshot with distinct daily records.
+Batch JSON is additive and does not change this plan schema or the meaning of the best marker.
+
 Use the installed virtual-environment Python. Put `--root ROOT` before the subcommand. JSON inputs use UTF-8.
 `plans/PROJECT/STAGE/plan.json` holds immutable full snapshots, change events, best selection history,
 rebuildable daily links, idempotency results and export checksums. Its schema is version 1. Process IDs

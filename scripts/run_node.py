@@ -11,7 +11,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--node', required=True, type=Path)
     parser.add_argument('--node-modules', required=True, type=Path)
-    parser.add_argument('script', choices=['build_monthly_report.mjs', 'render_lab_plan_docx.mjs'])
+    parser.add_argument('script', choices=['build_monthly_report.mjs', 'render_lab_plan_docx.mjs', 'build_formulation_workbook.mjs'])
     parser.add_argument('args', nargs=argparse.REMAINDER)
     args = parser.parse_args()
     env = dict(os.environ, LAB_RD_NODE_MODULES=str(args.node_modules.resolve()))

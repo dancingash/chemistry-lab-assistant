@@ -16,6 +16,8 @@ from lab_config import configure_console, PROGRAM_ROOT, init_data, python_execut
 
 LEGACY = ('lab-daily-report', 'lab-experiment-plan', 'lab-project-context', 'lab-weekly-report', 'lab-monthly-report')
 SCRIPTS = ('lab_config.py', 'lab_records.py', 'lab_plans.py', 'project_context.py',
+           'lab_formulations.py', 'lab_formulation_calc.py', 'build_formulation_workbook.mjs',
+           'lab_formulations_contract.md',
            'lab_quantities.py', 'lab_materials_docx.py', 'extract_daily_docx.py',
            'build_monthly_summary.py', 'build_monthly_report.mjs', 'render_lab_plan_docx.mjs',
            'node_loader.mjs', 'run_node.py', 'doctor.py', 'demo.py',

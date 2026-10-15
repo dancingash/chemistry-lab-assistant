@@ -1,10 +1,25 @@
-# Chemistry Lab Assistant · 研发助手
+# Chemistry Lab Assistant · 材料研发助手
 
-一个供 Codex 使用的材料研发技能入口，统一管理项目背景、实验方案、日报、样品追溯、周报 PPT 和月报 Excel。发行包含完整脚本和空白模板，安装后可移走克隆目录。真实数据保存在使用者自己的目录中。
+面向 Codex 的中文材料研发工作流，通过一个 `$lab-rd` 技能入口管理项目背景、版本化实验方案、配方批次、实验日报与样品追溯，并生成 Word、周报 PowerPoint 和月报 Excel。
 
-## 安装
+你可以直接描述研发任务，由助手调用相应模块完成记录、计算和导出。程序、模板与实验数据分开保存，安装后可以移走仓库克隆目录。
 
-准备 Python **3.12–3.14**、带技能支持的 Codex，以及联网下载 Python 依赖的环境。安装器不需要管理员权限。第一次安装下载 `requirements.lock` 中的固定依赖，创建独立虚拟环境，不修改系统 Python 包。
+## 功能概览
+
+| 功能 | 主要能力 | 数据或输出 |
+| --- | --- | --- |
+| 项目背景 | 维护目标、阶段、技术路线与背景版本 | 项目 YAML、版本历史 |
+| 实验方案 | 调整条件、继承指定版本、记录使用者指定的最优方案 | 方案 JSON、Word 方案总览与 SOP |
+| 配方与批次 | 计算用量、展开梯度和独立重复、保存批次修订 | 批次 JSON、双工作表配方 Excel |
+| 实验日报 | 记录实际操作、用量、测试结果与待补信息 | 日报 Word、样品追踪表 |
+| 样品追溯 | 关联样品、分支、步骤、方案版本与配方实验组 | 可重建索引、跨日期查询 |
+| 周报与月报 | 汇总已记录的工作，保留样品和测试步骤 | 周报 PPT、月报 Excel |
+
+配方模块支持质量比、质量分数、干湿基固含量、有效成分换算、摩尔比、当量、浓度稀释、配方缩放及按质量补足溶剂。所需物性参数保留来源，缺失参数标为待补。
+
+## 快速安装
+
+准备 Python **3.12–3.14**、带技能支持的 Codex，以及联网下载 Python 依赖的环境。支持 Windows、macOS 和 Linux。安装器不需要管理员权限；第一次安装下载 `requirements.lock` 中的固定依赖，创建独立虚拟环境。
 
 克隆仓库并进入其根目录（私有仓库需要先配置 GitHub 访问权限）：
 
@@ -27,7 +42,7 @@ macOS / Linux：
 python3 scripts/install.py
 ```
 
-默认技能位置：`$CODEX_HOME/skills/lab-rd`；未设置 `CODEX_HOME` 时为 `~/.codex/skills/lab-rd`。默认数据位置：`~/.lab-rd/data`。安装器创建空目录，不导入示例。可以自行指定：
+默认技能位置：`$CODEX_HOME/skills/lab-rd`；未设置 `CODEX_HOME` 时为 `~/.codex/skills/lab-rd`。默认数据位置：`~/.lab-rd/data`。安装器创建空目录，不导入示例。可以自行指定安装和数据目录：
 
 ```sh
 python3 scripts/install.py --skills-dir /path/to/codex/skills --data-dir /path/to/research-data
@@ -69,19 +84,41 @@ macOS / Linux：
 
 环境检查不会写入实验数据，也不能替代每份产物的渲染与视觉检查。Word 默认使用 Documents 的渲染器；其不可用时，方案模块提供 Codex 文档引擎的替代渲染路径。PPT 由 Presentations 负责制作与核验，Excel 由 Spreadsheets 负责制作与核验。字体和渲染器缺失必须明确报告。
 
-## 首次使用和五类请求
+## 使用流程
+
+建议按“建立项目 → 制定方案或配方 → 执行实验并记录 → 查询追溯 → 生成汇报”的顺序开始。已有项目可直接继续相应步骤。
 
 直接用自然语言指定 `$lab-rd`，也允许自动选择技能：
 
-- 项目背景：“建立一个新研发项目 NEW01，先记录我给出的目标，未知指标保持待补。”
-- 实验方案：“根据 NEW01 的现有方案调整反应时间，其余条件不变。”
-- 实验日报：“记录今天 NEW01 样品的实际投料和测试结果，引用刚才的方案版本。”
-- 每周汇报：“根据 NEW01 本周的日报制作周报 PPT，保留样品和测试步骤。”
-- 每月汇报：“汇总 NEW01 本月工作，使用空白月报模板生成 Excel。”
+| 场景 | 对话示例 |
+| --- | --- |
+| 建立项目 | “使用 $lab-rd 建立研发项目 NEW01，先记录我给出的目标，未知指标保持待补。” |
+| 调整方案 | “根据 NEW01 的第 2 版方案调整反应时间，其余条件不变。” |
+| 计算配方 | “计算 NEW01 中 A:B 为 1:1、1:2、1:3，每组总量 30 g，各独立重复两次，输出配方 Excel。” |
+| 确认批次完成 | “刚才这批的前两组今天已完成，按配方执行，实际称量和结果稍后补充，加入日报。” |
+| 补充日报 | “记录今天 NEW01 样品的实际投料和测试结果，引用刚才的方案版本。” |
+| 查询样品 | “查询 NEW01-20300107-1 的全部实验记录和使用的方案版本。” |
+| 制作周报 | “根据 NEW01 本周的日报制作周报 PPT，保留样品和测试步骤。” |
+| 制作月报 | “汇总 NEW01 本月工作，使用空白月报模板生成 Excel。” |
 
-入口按需读取五个模块。先创建项目，再根据实际条件建立方案；最优方案必须由使用者明确指定。简短输入可以直接记录，缺失数据保留待补。方案参数、计算值和未报告的实际测量不能混为实验事实。
+以上项目编号、样品编号和配比均为使用示例。实际工作中使用自己的项目与实验条件。通用项目模板位于 [templates/project-context.yaml](templates/project-context.yaml)，可记录使用者确认的目标、阶段或项目归并规则。
 
-通用项目模板在 `templates/project-context.yaml`，没有预设验收阈值。需要目标、阶段或项目归并规则时，将确认内容放入自己的项目 YAML。
+### 配方批次如何进入实验日报
+
+1. 描述原料、计算基准、总量、梯度和重复次数，助手预览计算结果，列出参数来源和待补项。多个梯度可按一一对应或全组合展开，含义不明确时先核对。
+2. 保存批次修订并关联固定的方案版本；独立重复可共用方案快照，每组保留自己的实验组编号。
+3. 导出含“配方总览”和“参数与计算”的 Excel，核对公式并渲染检查两个工作表。
+4. 使用者确认整批或指定组完成后，按实际实验日期写入日报，关联样品、方案版本、批次修订和实验组。跨日完成分别记录。
+5. 补充实际称量、条件偏差和测试结果；修正已有事实时沿用原记录编号。重复确认及中断重试保留既有记录关联。
+
+保存配方时不创建样品或日报。计划用量和实际称量分别记录，未报告的结果保持待补。Excel 是所选批次修订的导出文件，修改单元格后，需要通过对话重新计算并保存新版，才会更新批次数据。已有手动编辑的导出文件需要另存。
+
+### 记录与版本规则
+
+- 日报 Word 保存实验事实；背景 YAML、方案 JSON 和批次 JSON 保存各自的版本与关联。
+- 最优方案由使用者明确指定。建立方案或完成批次不会自动更改最优标记。
+- 已知的部分可以直接记录，缺失信息保留待补；计划值、计算值、实际测量值分别标注。
+- 样品、分支、步骤和记录编号保持稳定，支持跨日期追溯及索引重建。
 
 ## 虚构演示
 
@@ -100,6 +137,7 @@ macOS / Linux：
 ```text
 references/                  项目 YAML 和版本历史
 plans/                       方案快照与导出文件
+plans/PROJECT/STAGE/batches/  配方批次修订、导出文件与操作日志
 report/YYYY-MM/               日报、追踪表、正式周报/月报
 report/index.json             可重建索引
 work/                        候选方案、临时汇总、渲染检查
@@ -112,7 +150,10 @@ work/                        候选方案、临时汇总、渲染检查
 ```sh
 <安装的Python> <程序目录>/scripts/lab_records.py --root /path/to/data query --sample NEW01-20300107-1
 <安装的Python> <程序目录>/scripts/lab_plans.py --root /path/to/data list --project NEW01
+<安装的Python> <程序目录>/scripts/lab_formulations.py --root /path/to/data list --project NEW01
 ```
+
+`<安装的Python>` 和 `<程序目录>` 是说明用占位符，执行前替换为实际路径。JSON 输入使用 UTF-8，命令的 `--root` 放在子命令之前。日常使用可直接让 Codex 调用这些工具。
 
 ## 升级、迁移与备份
 
@@ -134,19 +175,57 @@ python3 scripts/install.py --data-dir /path/to/old-data --retire-legacy
 <安装的Python> <程序目录>/scripts/lab_records.py --root /path/to/data rebuild
 ```
 
-历史月度 Word 需要以 `--legacy <相对路径>` 显式登记权威源，不能自动混入所有旧快照。数据契约详见 `scripts/*_contract.md`。
+历史月度 Word 需要以 `--legacy <相对路径>` 显式登记权威源，不能自动混入所有旧快照。批次写入中断时，使用原操作编号和完全相同的输入重试，保留操作日志以便恢复。
+
+## 仓库结构与开发文档
+
+```text
+skills/lab-rd/         技能入口及各工作流模块
+scripts/               安装、记录、方案、配方计算和导出工具
+templates/             空白项目与月报模板
+examples/              虚构演示数据
+tests/                 安装与可迁移性测试
+.github/workflows/     三平台自动测试
+README.md              中文安装与使用说明
+VALIDATION.md          验证记录与已知限制
+```
+
+| 文档 | 内容 |
+| --- | --- |
+| [技能入口](skills/lab-rd/SKILL.md) | 模块选择、程序与数据路径、报告引擎要求 |
+| [配方批次契约](scripts/lab_formulations_contract.md) | 计算模式、梯度、修订、完成确认与重试 |
+| [实验方案契约](scripts/lab_plans_contract.md) | 方案快照、条件继承和最优标记 |
+| [实验记录契约](scripts/lab_records_contract.md) | 日报字段、样品编号、关联和修正 |
+| [研究工作流契约](scripts/research_workflow_contract.md) | 用量与物性来源、文献建议和技术路线 |
 
 ## 开发与平台验证
 
 ```sh
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.lock
-.venv/bin/python -m unittest discover -s scripts -p 'test_lab_*.py'
-.venv/bin/python -m unittest discover -s tests
+.venv/bin/python tests/run_tests.py
 ```
 
-Windows 用 `.venv/Scripts/python.exe`。`.github/workflows/test.yml` 配置 Windows、macOS、Linux 和 Python 3.12/3.13/3.14 的核心测试，包括干净副本安装、重复安装、升级、中文路径、数据隔离与缺失依赖。
+Windows PowerShell：
 
-Windows、macOS、Linux × Python 3.12/3.13/3.14 的 9 组核心测试与独立安装检查已通过 [GitHub Actions](https://github.com/dancingash/chemistry-lab-assistant/actions/runs/37888173259)。平台与报告 QA 记录见 [VALIDATION.md](VALIDATION.md)。完整报告使用 Codex 专用运行环境，需要在目标机器执行完整环境检查及示例报告渲染；普通 CI 验证核心工具和安装，不宣称完成 Codex 图形引擎验证。
+```powershell
+py -3.12 -m venv .venv
+& ./.venv/Scripts/python.exe -m pip install -r requirements.lock
+& ./.venv/Scripts/python.exe tests/run_tests.py
+```
+
+统一测试入口将临时数据放入 `work/test-temp/`。测试覆盖记录、方案、研究流程、配方算术与批次生命周期，以及干净副本安装、重复安装、升级、中文路径、数据隔离与缺失依赖。
+
+[GitHub Actions 配置](.github/workflows/test.yml) 包含 Windows、macOS、Linux × Python 3.12/3.13/3.14 的 9 组核心测试及独立安装检查。
+
+历史提交 `dfc837f` 的 9 组检查已通过，详见 [VALIDATION.md](VALIDATION.md) 中的运行记录；新提交的检查结果请查看仓库的 [Actions 页面](https://github.com/dancingash/chemistry-lab-assistant/actions)。配方批次功能的本地测试及报告 QA 也记录在验证文档中。完整报告使用 Codex 专用运行环境，需要在目标机器执行完整环境检查及示例报告渲染；普通 CI 验证核心工具和安装。
+
+## 本次更新
+
+- 新增配方计算引擎、梯度与重复展开、可恢复的批次修订和完成入日报流程。
+- 新增双工作表配方 Excel 导出，包含数值比对、输入变化重算和工作表预览检查。
+- 日报查询和索引重建保留批次编号、修订与实验组关联。
+- 安装器打包新模块，并增加脱离源码目录运行配方和批次完成的回归检查。
+- 完善中文安装、使用流程、数据管理与开发文档。
 
 仓库仅发布程序、干净模板和虚构示例。真实项目、历史报告、运行库、索引和本机配置均被 `.gitignore` 排除。本项目的安装入口是 `scripts/install.py`，`pyproject.toml` 声明依赖元数据，不将 `pip install .` 作为完整技能安装。

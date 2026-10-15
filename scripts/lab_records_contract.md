@@ -31,6 +31,9 @@ Both source fields are required for branches. Put measurements, units, actual/ca
 qualifiers and source record IDs in details. These become visible labels in Word.
 
 Optional plan reference strings: `plan_stage`, `plan_id`, `plan_version` (all three together).
+Optional batch strings: `batch_id`, `batch_revision`, `batch_group` (all three together, with a plan
+reference). The batch revision and group must exist. These visible labels survive query and cold
+rebuild. See `lab_formulations_contract.md` for completion and stable record-ID recovery.
 Use the process ID, tool-returned `PROJECT:STAGE` and positive numeric version as text; never `best`.
 The referenced snapshot must exist and match the daily project and stage. They are written as visible
 方案工序、方案编号、方案版本 labels and retained during query and index rebuild. See

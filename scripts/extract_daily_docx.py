@@ -24,6 +24,7 @@ FIELD_NAMES = {
     'today': '今日实验', 'details': '配方与细节', 'follow_up': '后续跟进',
     'risk': '问题与风险', 'context_version': '背景版本',
     'plan_stage': '方案工序', 'plan_id': '方案编号', 'plan_version': '方案版本',
+    'batch_id': '配方批次', 'batch_revision': '配方批次版本', 'batch_group': '配方实验组',
 }
 
 
