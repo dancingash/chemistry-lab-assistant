@@ -1,5 +1,7 @@
 # Chemistry Lab Assistant · 材料研发助手
 
+**简体中文** | [English](README.en.md)
+
 面向 Codex 的中文材料研发工作流，通过一个 `$lab-rd` 技能入口管理项目背景、版本化实验方案、配方批次、实验日报与样品追溯，并生成 Word、周报 PowerPoint 和月报 Excel。
 
 你可以直接描述研发任务，由助手调用相应模块完成记录、计算和导出。程序、模板与实验数据分开保存，安装后可以移走仓库克隆目录。
@@ -187,6 +189,7 @@ examples/              虚构演示数据
 tests/                 安装与可迁移性测试
 .github/workflows/     三平台自动测试
 README.md              中文安装与使用说明
+README.en.md           英文安装与使用说明
 VALIDATION.md          验证记录与已知限制
 ```
 
@@ -218,7 +221,7 @@ py -3.12 -m venv .venv
 
 [GitHub Actions 配置](.github/workflows/test.yml) 包含 Windows、macOS、Linux × Python 3.12/3.13/3.14 的 9 组核心测试及独立安装检查。
 
-历史提交 `dfc837f` 的 9 组检查已通过，详见 [VALIDATION.md](VALIDATION.md) 中的运行记录；新提交的检查结果请查看仓库的 [Actions 页面](https://github.com/dancingash/chemistry-lab-assistant/actions)。配方批次功能的本地测试及报告 QA 也记录在验证文档中。完整报告使用 Codex 专用运行环境，需要在目标机器执行完整环境检查及示例报告渲染；普通 CI 验证核心工具和安装。
+三平台验证记录详见 [VALIDATION.md](VALIDATION.md)；每次新提交的检查结果请查看仓库的 [Actions 页面](https://github.com/dancingash/chemistry-lab-assistant/actions)。配方批次功能的本地测试及报告 QA 也记录在验证文档中。完整报告使用 Codex 专用运行环境，需要在目标机器执行完整环境检查及示例报告渲染；普通 CI 验证核心工具和安装。
 
 ## 本次更新
 
@@ -226,6 +229,6 @@ py -3.12 -m venv .venv
 - 新增双工作表配方 Excel 导出，包含数值比对、输入变化重算和工作表预览检查。
 - 日报查询和索引重建保留批次编号、修订与实验组关联。
 - 安装器打包新模块，并增加脱离源码目录运行配方和批次完成的回归检查。
-- 完善中文安装、使用流程、数据管理与开发文档。
+- 提供可切换的中英文安装、使用流程、数据管理与开发文档。
 
 仓库仅发布程序、干净模板和虚构示例。真实项目、历史报告、运行库、索引和本机配置均被 `.gitignore` 排除。本项目的安装入口是 `scripts/install.py`，`pyproject.toml` 声明依赖元数据，不将 `pip install .` 作为完整技能安装。

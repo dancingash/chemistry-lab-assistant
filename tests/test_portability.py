@@ -31,7 +31,7 @@ class PortableInstallTest(unittest.TestCase):
         source.mkdir()
         # Reproduce only the complete declared release, not the local workspace.
         for relative, path in package_files(ROOT).items():
-            if not relative.startswith(('scripts/', 'templates/', 'examples/')) and relative not in ('README.md', 'VALIDATION.md', 'requirements.lock', 'pyproject.toml'):
+            if not relative.startswith(('scripts/', 'templates/', 'examples/')) and relative not in ('README.md', 'README.en.md', 'VALIDATION.md', 'requirements.lock', 'pyproject.toml'):
                 relative = 'skills/lab-rd/' + relative
             target = source / relative
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -41,6 +41,8 @@ class PortableInstallTest(unittest.TestCase):
         install(source, destination, data, skip_deps=True)
         shutil.move(str(source), str(self.folder / 'removed-clone'))
         package = destination / 'lab-rd'
+        self.assertIn('[English](README.en.md)', (package / 'README.md').read_text(encoding='utf-8'))
+        self.assertIn('[简体中文](README.md)', (package / 'README.en.md').read_text(encoding='utf-8'))
         env = dict(os.environ)
         env.pop('LAB_RD_DATA_ROOT', None)
         env.pop('REPORT_SKILLS_ROOT', None)

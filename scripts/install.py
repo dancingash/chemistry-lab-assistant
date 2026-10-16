@@ -38,7 +38,7 @@ def package_files(source):
         names = ('monthly-summary.xlsx', 'project-context.yaml') if directory == 'templates' else ('project.yaml', 'plan.json', 'records.json')
         for name in names:
             files[directory + '/' + name] = source / directory / name
-    files.update({name: source / name for name in ('requirements.lock', 'pyproject.toml', 'README.md', 'VALIDATION.md')})
+    files.update({name: source / name for name in ('requirements.lock', 'pyproject.toml', 'README.md', 'README.en.md', 'VALIDATION.md')})
     for relative, path in files.items():
         if not path.is_file():
             raise ValueError('Incomplete release: ' + relative)
