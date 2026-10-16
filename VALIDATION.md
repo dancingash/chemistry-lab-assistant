@@ -1,5 +1,13 @@
 # 0.1.0 验证记录
 
+## 2026-10-16 All workflows 全量核查与 Actions 升级
+
+- 核查时仓库只有 `Portable core and installer` 一个工作流，共 7 条运行记录；5 条成功，2 条历史失败。其中第二条失败运行曾执行 3 次，已逐次核对任务状态并读取全部 12 个失败任务的日志。
+- [运行 1](https://github.com/dancingash/chemistry-lab-assistant/actions/runs/37887262195) 的 Windows / Python 3.12、3.13、3.14 均有两项测试报错：`test_monthly_legacy_mapping_starts_on_effective_date` 和 `test_demo_links_two_days_to_one_plan_and_refuses_overwrite`。根因是月报汇总输出中文时使用 cp1252；`13218d0` 已在月报 CLI 中调用 UTF-8 控制台配置。
+- [运行 2](https://github.com/dancingash/chemistry-lab-assistant/actions/runs/37887726172) 的三次执行均在 Windows 三个 Python 版本的真实安装步骤失败，日志指向 pip 的 cp1252 编码；`00966eb` 已通过 UTF-8 管道转发修复。重新运行旧提交仍会使用旧代码。
+- 其余 5 条成功运行的 45 个任务均已核对为成功；`00966eb` 的[完整矩阵](https://github.com/dancingash/chemistry-lab-assistant/actions/runs/38846711143)包含每组 76 项测试及真实隔离安装检查。
+- 成功运行中仍有旧 Actions 引起的 Node.js 20 强制迁移警告及 `punycode` 弃用警告。本次将 `actions/checkout` 从 v4 升至 v7.0.1、`actions/setup-python` 从 v5 升至 v7.0.0；两者原生使用 Node.js 24。已核对官方发行说明及 action.yml，现有 GitHub 托管 runner 2.337.0 满足最低版本要求。本次升级后的任务结果与日志以新提交触发的运行记录为准。
+
 ## 2026-10-16 GitHub Actions 失败记录复核
 
 - 当前远端 `main` 提交 `43131349774a56d7c90c2bf80efdf5bae25564aa` 的[最近一次运行](https://github.com/dancingash/chemistry-lab-assistant/actions/runs/38680775371)中，三平台 × Python 3.12、3.13、3.14 共 9 组全部通过。
