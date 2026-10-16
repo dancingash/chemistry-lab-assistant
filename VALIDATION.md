@@ -1,5 +1,20 @@
 # 0.1.0 验证记录
 
+## 2026-10-16 GitHub Actions 失败记录复核
+
+- 当前远端 `main` 提交 `43131349774a56d7c90c2bf80efdf5bae25564aa` 的[最近一次运行](https://github.com/dancingash/chemistry-lab-assistant/actions/runs/38680775371)中，三平台 × Python 3.12、3.13、3.14 共 9 组全部通过。
+- 两次历史失败分别出现在中文月报输出和真实隔离安装的 pip 输出，均涉及 Windows cp1252 无法编码中文。月报输出已有 UTF-8 修复；本次提交进一步通过管道转发 pip 日志，并增加真实 pip 离线回归及非 UTF-8 父进程下的安装检查。
+- 本次重新执行原有 74 项回归及两项真实 pip 离线回归，全部通过（分两个解释器执行）；2026-10-15 条目所记录的真实安装与安装后检查同样通过。本次提交发布后的三平台结果须以新运行记录为准。
+
+## 2026-10-15 Windows pip 中文路径编码修复
+
+- 安装器通过 UTF-8 管道合并并逐行转发 pip 的标准输出与错误输出，保留失败退出码；禁用 pip 彩色输出和进度条。
+- CI 的真实隔离安装步骤显式设置 `PYTHONIOENCODING=cp1252`、`PYTHONUTF8=0`、`PYTHONLEGACYWINDOWSSTDIO=1`，继续使用中文和空格路径。
+- Windows / Python 3.13.1 / pip 25.3：两项新增离线测试通过，覆盖真实 `pip --python` 向不含 pip 的虚拟环境安装本地 wheel，以及失败时保留中文诊断和退出码。
+- Windows / Python 3.12.14：原有 74 项回归测试通过；该解释器不含 pip，两项新增测试在此轮跳过，已由上述 Python 3.13 单独验证。
+- Windows / Python 3.13.1：在上述 cp1252 环境和中文、空格路径中完成真实隔离安装，9 个固定依赖全部安装成功；新环境通过 `tests/check_installed.py` 的核心能力检查、演示生成和样品查询。此次仅验证核心功能，不包含专用报告引擎和视觉 QA。
+- Python 语法、工作流 YAML 配置及 `git diff --check` 检查通过。本次修复尚未重跑 GitHub Actions 三平台矩阵或验证 Python 3.14。
+
 ## 2026-10-15 发布前检查
 
 - 使用已安装的独立 Python 环境执行 `tests/run_tests.py`，74 项回归测试全部通过。

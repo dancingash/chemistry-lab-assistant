@@ -52,6 +52,22 @@ def managed_path(target, relative):
     return path
 
 
+def install_dependencies(runtime, requirements):
+    # Pipes make PYTHONIOENCODING effective even with legacy Windows console
+    # handles. Reconfiguring this process's streams does not affect pip's streams.
+    command = [sys.executable, '-m', 'pip', '--python', str(runtime), 'install',
+               '--disable-pip-version-check', '--no-color', '--progress-bar', 'off',
+               '-r', str(requirements)]
+    with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                          text=True, encoding='utf-8', errors='replace',
+                          env={**os.environ, 'PYTHONIOENCODING': 'utf-8', 'PYTHONUTF8': '1'}) as process:
+        for line in process.stdout:
+            print(line, end='', flush=True)
+        returncode = process.wait()
+    if returncode:
+        raise subprocess.CalledProcessError(returncode, command)
+
+
 def install(source, skills_dir, data_dir=None, skip_deps=False, retire_legacy=False):
     if not (3, 12) <= sys.version_info[:2] < (3, 15):
         raise ValueError('Python 3.12–3.14 is required')
@@ -94,9 +110,7 @@ def install(source, skills_dir, data_dir=None, skip_deps=False, retire_legacy=Fa
                     venv.EnvBuilder(with_pip=False).create(target / '.venv')
                 if old.get('dependency_hash') != dependency_hash:
                     # Also supports Codex's embedded Python, which has pip but no ensurepip wheels.
-                    subprocess.run([sys.executable, '-m', 'pip', '--python', str(runtime), 'install', '--disable-pip-version-check',
-                                    '-r', str(stage / 'requirements.lock')], check=True,
-                                   env={**os.environ, 'PYTHONIOENCODING': 'utf-8', 'PYTHONUTF8': '1'})
+                    install_dependencies(runtime, stage / 'requirements.lock')
                 subprocess.run([str(runtime), '-c', 'import docx, yaml, openpyxl, pptx'], check=True)
             timestamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
             backup = skills_dir.parent / '.lab-rd-backups' / timestamp
